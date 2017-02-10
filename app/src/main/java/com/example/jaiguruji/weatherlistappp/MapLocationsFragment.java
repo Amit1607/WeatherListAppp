@@ -51,7 +51,7 @@ public class MapLocationsFragment extends Fragment {
                      googleMap.addMarker(markerOptions);
                 }
                 CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(
-                        new LatLng(20.59,78.96),2f);
+                        new LatLng(20.59,78.96),4f);
                 googleMap.animateCamera(cameraUpdate);
             }
         });
@@ -60,7 +60,10 @@ public class MapLocationsFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
-        Fragment fragment = getFragmentManager().findFragmentById(R.id.map);
-        getFragmentManager().beginTransaction().remove(fragment).commit();
+        super.onDestroyView();
+        MapFragment mapFragment = (MapFragment)getActivity().getFragmentManager().findFragmentById(R.id.map);
+        android.app.FragmentTransaction transaction = getActivity().getFragmentManager().beginTransaction();
+        transaction.remove(mapFragment);
+        transaction.commit();
     }
 }

@@ -10,11 +10,19 @@ import android.net.NetworkInfo;
 
 public class HelperFunctions {
 
-    static boolean isInternetConnected(Context contrext){
-        ConnectivityManager connectivityManager = (ConnectivityManager)contrext.
-                getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        return  networkInfo.isConnectedOrConnecting();
+    static boolean isInternetConnected(Context context){
+        ConnectivityManager cm =
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        try {
+            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+            boolean isConnected = activeNetwork != null &&
+                    activeNetwork.isConnectedOrConnecting();
+
+            return isConnected;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
 }

@@ -47,9 +47,9 @@ public class WeatherInfoAdapter extends RecyclerView.Adapter<WeatherInfoAdapter.
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         holder.mName.setText(mWeatherInfoList.get(position).getName());
-        holder.mTempMin.setText(String.valueOf(mWeatherInfoList.get(position).getTemp_min()));
-        holder.mTempMax.setText(String.valueOf(mWeatherInfoList.get(position).getTemp_max()));
-        holder.mTemp.setText(String.valueOf(mWeatherInfoList.get(position).getTemp()));
+        holder.mTempMin.setText(String.valueOf(mWeatherInfoList.get(position).getTemp_min()) +"˚C");
+        holder.mTempMax.setText(String.valueOf(mWeatherInfoList.get(position).getTemp_max()) +"˚C");
+        holder.mTemp.setText(String.valueOf(mWeatherInfoList.get(position).getTemp())+"˚C");
         holder.mDescription.setText(String.valueOf(mWeatherInfoList.get(position).getDescription()));
     }
 

@@ -2,9 +2,13 @@ package com.example.jaiguruji.weatherlistappp;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -19,9 +23,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
+
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements OnAsynctTaskComplete{
+public class MainActivity extends AppCompatActivity implements OnAsynctTaskComplete ,GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener{
     private final String APP_ID= "e4018e2554a19c99511f7f24401f108e";
 
 
@@ -30,8 +39,9 @@ public class MainActivity extends AppCompatActivity implements OnAsynctTaskCompl
     ArrayList<WeatherInfoItem> mArrayList;
     ArrayList<WeatherInfoItem> mFilteredList;
     TextView mEmpty_msg;
-    double current_latitude;
-    double current_longitude;
+    double current_latitude=0;
+    double current_longitude=0;
+    GoogleApiClient mGoogleApiClient;
 
 
     @Override
@@ -45,7 +55,13 @@ public class MainActivity extends AppCompatActivity implements OnAsynctTaskCompl
         setSupportActionBar(toolbar);
         mEmpty_msg = (TextView)findViewById(R.id.tv_empty_msg);
 
-        requestLocationUpdate();
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+        }
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
         mRecyclerView.setLayoutManager(linearLayoutManager);
@@ -70,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements OnAsynctTaskCompl
             StringBuilder URL = new StringBuilder();
 
             //open weather api with appended city ids and app Id.
-            URL.append("http://api.openweathermap.org/data/2.5/group?id=1270642,1274746,1269743,1256237,1262321,1275841,1270583,1271157&units=metric&appid=e4018e2554a19c99511f7f24401f108e");
+            URL.append("http://api.openweathermap.org/data/2.5/group?id=1270642,1274746,1269743,1256237,1262321,1275841,1263214&units=metric&appid=e4018e2554a19c99511f7f24401f108e");
 
             //http://api.openweathermap.org/data/2.5/group?id=1270642,1274746,1269743,1256237,1262321,1275841,1263214,1270583,1270583,1271157&units=metric&appid=e4018e2554a19c99511f7f24401f108e
             AsyncTaskFetchData asyncTaskFetchData = new AsyncTaskFetchData(mContext,this);
@@ -78,6 +94,12 @@ public class MainActivity extends AppCompatActivity implements OnAsynctTaskCompl
         }
         else{
             AlertDialog alertDialog = new AlertDialog.Builder(mContext).setMessage("Internet Not Available")
+                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
                     .create();
             alertDialog.show();
         }
@@ -107,34 +129,22 @@ public class MainActivity extends AppCompatActivity implements OnAsynctTaskCompl
         manager.beginTransaction().replace(R.id.placeholder,fragment).addToBackStack(null).commit();
     }
 
-    void requestLocationUpdate(){
-        LocationManager locationManager = (LocationManager)mContext.getSystemService(LOCATION_SERVICE);
-         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 20000, 100, new android.location.LocationListener() {
-             @Override
-             public void onLocationChanged(Location location) {
-             current_latitude = location.getLatitude();
-             current_longitude = location.getLongitude();
-             Log.v("LONGI",current_latitude+"");
-             Log.v("LATI",current_latitude+"");
 
-             }
-
-             @Override
-             public void onStatusChanged(String provider, int status, Bundle extras) {
-
-             }
-
-             @Override
-             public void onProviderEnabled(String provider) {
-
-             }
-
-             @Override
-             public void onProviderDisabled(String provider) {
-
-             }
-         });
-
+    void showGpsEnableDialog(){
+        final String action = Settings.ACTION_LOCATION_SOURCE_SETTINGS;
+        AlertDialog alertDialog = new AlertDialog.Builder(this).setMessage("This app needs your current location.Please enable it")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                     startActivity(new Intent(action));
+                    }
+                }).setNegativeButton("No thanks", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                    }
+                }).create();
+        alertDialog.show();
 
     }
 
@@ -157,11 +167,15 @@ public class MainActivity extends AppCompatActivity implements OnAsynctTaskCompl
 
     private void filterByDistance(int position){
         mFilteredList.clear();
+        if (current_latitude==0 && current_longitude==0){
+            current_latitude=28.70;
+            current_longitude=77.10;
+        }
         switch (position){
             case 0 :
                 for(int i=0;i<mArrayList.size();i++) {
                     float results[] = new float[2];
-                    Location.distanceBetween(28.70, 77.10, mArrayList.get(i).getLatitude(), mArrayList.get(i).getLongitude(), results);
+                    Location.distanceBetween(current_latitude, current_longitude, mArrayList.get(i).getLatitude(), mArrayList.get(i).getLongitude(), results);
                     if (results[0] / 1000 <100 ) {
                         mFilteredList.add(mArrayList.get(i));
                     }
@@ -170,7 +184,7 @@ public class MainActivity extends AppCompatActivity implements OnAsynctTaskCompl
             case 1 :
                 for(int i=0;i<mArrayList.size();i++) {
                     float results[] = new float[2];
-                    Location.distanceBetween(28.70, 77.10, mArrayList.get(i).getLatitude(), mArrayList.get(i).getLongitude(), results);
+                    Location.distanceBetween(current_latitude, current_longitude, mArrayList.get(i).getLatitude(), mArrayList.get(i).getLongitude(), results);
                     if (results[0] / 1000 > 100 && results[0] / 1000 < 200) {
                         mFilteredList.add(mArrayList.get(i));
                     }
@@ -179,7 +193,7 @@ public class MainActivity extends AppCompatActivity implements OnAsynctTaskCompl
             case 2:
                 for(int i=0;i<mArrayList.size();i++) {
                     float results[] = new float[2];
-                    Location.distanceBetween(28.70, 77.10, mArrayList.get(i).getLatitude(), mArrayList.get(i).getLongitude(), results);
+                    Location.distanceBetween(current_latitude,current_longitude, mArrayList.get(i).getLatitude(), mArrayList.get(i).getLongitude(), results);
                     if (results[0] / 1000 > 200 && results[0] / 1000 < 300) {
                         mFilteredList.add(mArrayList.get(i));
                     }
@@ -188,7 +202,7 @@ public class MainActivity extends AppCompatActivity implements OnAsynctTaskCompl
             case 3:
                 for(int i=0;i<mArrayList.size();i++) {
                     float results[] = new float[2];
-                    Location.distanceBetween(28.70, 77.10, mArrayList.get(i).getLatitude(), mArrayList.get(i).getLongitude(), results);
+                    Location.distanceBetween(current_latitude,current_longitude, mArrayList.get(i).getLatitude(), mArrayList.get(i).getLongitude(), results);
                     if (results[0] / 1000 > 300 && results[0] / 1000 < 500) {
                         mFilteredList.add(mArrayList.get(i));
                     }
@@ -197,7 +211,7 @@ public class MainActivity extends AppCompatActivity implements OnAsynctTaskCompl
             case 4:
                 for(int i=0;i<mArrayList.size();i++) {
                     float results[] = new float[2];
-                    Location.distanceBetween(28.70, 77.10, mArrayList.get(i).getLatitude(), mArrayList.get(i).getLongitude(), results);
+                    Location.distanceBetween(current_latitude,current_longitude, mArrayList.get(i).getLatitude(), mArrayList.get(i).getLongitude(), results);
                     if (results[0] / 1000 > 500 && results[0] / 1000 < 1000) {
                         mFilteredList.add(mArrayList.get(i));
                     }
@@ -206,7 +220,7 @@ public class MainActivity extends AppCompatActivity implements OnAsynctTaskCompl
             case 5:
                 for(int i=0;i<mArrayList.size();i++) {
                     float results[] = new float[2];
-                    Location.distanceBetween(28.70, 77.10, mArrayList.get(i).getLatitude(), mArrayList.get(i).getLongitude(), results);
+                    Location.distanceBetween(current_latitude,current_longitude, mArrayList.get(i).getLatitude(), mArrayList.get(i).getLongitude(), results);
                     if (results[0] / 1000 > 1000 ) {
                         mFilteredList.add(mArrayList.get(i));
                     }
@@ -224,6 +238,8 @@ public class MainActivity extends AppCompatActivity implements OnAsynctTaskCompl
         mRecyclerView.setAdapter(adapter);
     }
 
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
        getMenuInflater().inflate(R.menu.activity_menu,menu);
@@ -236,5 +252,35 @@ public class MainActivity extends AppCompatActivity implements OnAsynctTaskCompl
           showFilterDialog();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    protected void onStart() {
+        mGoogleApiClient.connect();
+        super.onStart();
+    }
+
+    protected void onStop() {
+        mGoogleApiClient.disconnect();
+        super.onStop();
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                mGoogleApiClient);
+        if (mLastLocation != null) {
+            current_latitude=mLastLocation.getLatitude();
+            current_longitude=mLastLocation.getLongitude();
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
 }

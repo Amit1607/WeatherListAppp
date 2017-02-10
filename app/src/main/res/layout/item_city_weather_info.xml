@@ -11,11 +11,12 @@
         android:layout_marginRight="10dp"
         android:layout_marginLeft="10dp"
         app:cardCornerRadius="4dp"
+        app:cardUseCompatPadding="true"
         android:layout_marginBottom="15dp"
         app:cardElevation="4dp"
         android:layout_marginTop="10dp"
         android:id="@+id/card"
-        android:layout_height="120dp">
+        android:layout_height="130dp">
 
      <RelativeLayout
          android:layout_width="match_parent"
@@ -67,8 +68,8 @@
              android:layout_alignTop="@+id/tv_label_min"
              android:layout_toRightOf="@+id/tv_label_min"
              android:layout_toEndOf="@+id/tv_label_min"
-             android:layout_marginLeft="16dp"
-             android:layout_marginStart="16dp"
+             android:layout_marginLeft="8dp"
+             android:layout_marginStart="8dp"
              android:id="@+id/tv_temp_min"
              android:textColor="#212121"
              android:textStyle="normal|bold" />
@@ -96,7 +97,7 @@
              android:textStyle="normal|bold"
              android:layout_alignBaseline="@+id/tv_temp_min"
              android:layout_alignBottom="@+id/tv_temp_min"
-             android:layout_marginLeft="50dp"
+             android:layout_marginLeft="20dp"
              android:layout_toRightOf="@+id/tv_temp_min"
               />
 
@@ -105,7 +106,7 @@
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
              android:id="@+id/tv_temp_max"
-             android:layout_marginLeft="20dp"
+             android:layout_marginLeft="8dp"
              android:textColor="#212121"
              android:textStyle="normal|bold"
              android:layout_toRightOf="@id/label_tv_temp_max"

@@ -58,7 +58,7 @@
         android:id="@+id/maps" />
 
     <TextView
-        android:text="No Cities Found for this range,tap the map button to filter again"
+        android:text="No Cities Found for this range,tap the filter button to filter again"
         android:layout_centerVertical="true"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
