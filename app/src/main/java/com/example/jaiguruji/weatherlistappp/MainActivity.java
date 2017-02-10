@@ -87,17 +87,6 @@ public class MainActivity extends AppCompatActivity implements OnAsynctTaskCompl
 
 
 
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(ActivityCompat.checkSelfPermission(this, permissions[0]) == PackageManager.PERMISSION_GRANTED){
-         if(requestCode==5){
-             mGoogleApiClient.connect();
-         }
-        }
-    }
-
     private void requestForData(){
         if(HelperFunctions.isInternetConnected(mContext)){
             StringBuilder URL = new StringBuilder();
@@ -155,10 +144,11 @@ public class MainActivity extends AppCompatActivity implements OnAsynctTaskCompl
             public void onClick(DialogInterface dialog, int which) {
                 filterByDistance(which);
             }
-        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        }).setNegativeButton("Unfilter", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
+                WeatherInfoAdapter adapter = new WeatherInfoAdapter(mContext,mArrayList,mRecyclerView);
+                mRecyclerView.setAdapter(adapter);
             }
         }).create();
         alertDialog.show();
@@ -281,5 +271,14 @@ public class MainActivity extends AppCompatActivity implements OnAsynctTaskCompl
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        try {
+            super.onBackPressed();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }
