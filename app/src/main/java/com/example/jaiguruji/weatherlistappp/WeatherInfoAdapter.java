@@ -28,7 +28,6 @@ public class WeatherInfoAdapter extends RecyclerView.Adapter<WeatherInfoAdapter.
         this.mWeatherInfoList = mWeatherInfoList;
         inflater = (LayoutInflater)mActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
        // typeface1 = Typeface.createFromAsset(mActivity.getAssets(),"robotoMedium.ttf");
-        //typeface2= Typeface.createFromAsset(mActivity.getAssets(),"RobotoRegular.ttf");
         mRecyclerView = recyclerView;
     }
 

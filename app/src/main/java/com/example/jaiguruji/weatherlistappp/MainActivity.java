@@ -37,7 +37,6 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements OnAsynctTaskComplete ,GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener{
-    private final String APP_ID= "e4018e2554a19c99511f7f24401f108e";
 
 
     Activity mContext;
@@ -56,9 +55,6 @@ public class MainActivity extends AppCompatActivity implements OnAsynctTaskCompl
         setContentView(R.layout.activity_main);
         mContext = MainActivity.this;
 
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
-            askForPermission(Manifest.permission.ACCESS_COARSE_LOCATION,5);
-        }
 
         mRecyclerView = (RecyclerView)findViewById(R.id.recyclerView);
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
@@ -90,23 +86,7 @@ public class MainActivity extends AppCompatActivity implements OnAsynctTaskCompl
     }
 
 
-    private void askForPermission(String permission, Integer requestCode) {
-        if (ContextCompat.checkSelfPermission(MainActivity.this, permission) != PackageManager.PERMISSION_GRANTED) {
 
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, permission)) {
-
-                //This is called if user has denied the permission before
-                //In this case I am just asking the permission again
-                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, requestCode);
-
-            } else {
-
-                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, requestCode);
-            }
-        } else {
-        }
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -166,24 +146,6 @@ public class MainActivity extends AppCompatActivity implements OnAsynctTaskCompl
         manager.beginTransaction().replace(R.id.placeholder,fragment).addToBackStack(null).commit();
     }
 
-
-    void showGpsEnableDialog(){
-        final String action = Settings.ACTION_LOCATION_SOURCE_SETTINGS;
-        AlertDialog alertDialog = new AlertDialog.Builder(this).setMessage("This app needs your current location.Please enable it")
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                     startActivity(new Intent(action));
-                    }
-                }).setNegativeButton("No thanks", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-                    }
-                }).create();
-        alertDialog.show();
-
-    }
 
    private void showFilterDialog(){
         final String items []= {"less than 100 km","100 to 200 km","200 to 300km ","300-500 km","500-1000km"};
@@ -291,10 +253,10 @@ public class MainActivity extends AppCompatActivity implements OnAsynctTaskCompl
         return super.onOptionsItemSelected(item);
     }
 
-//    protected void onStart() {
-//        mGoogleApiClient.connect();
-//        super.onStart();
-//    }
+    protected void onStart() {
+        mGoogleApiClient.connect();
+        super.onStart();
+    }
 
     protected void onStop() {
         mGoogleApiClient.disconnect();
