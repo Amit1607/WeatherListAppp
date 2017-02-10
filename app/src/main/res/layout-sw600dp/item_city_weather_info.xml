@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:background="#eeeeee"
+    android:layout_height="wrap_content">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        app:cardCornerRadius="4dp"
+        app:cardUseCompatPadding="true"
+        android:layout_marginBottom="15dp"
+        app:cardElevation="4dp"
+        android:layout_marginTop="10dp"
+        android:id="@+id/card"
+        android:layout_height="145dp">
+
+     <RelativeLayout
+         android:layout_width="match_parent"
+         android:layout_height="match_parent">
+
+         <TextView
+             android:text="18C"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_marginRight="28dp"
+             android:layout_marginEnd="28dp"
+             android:id="@+id/tv_temp_main"
+             android:textSize="30sp"
+             android:textStyle="normal|bold"
+             android:textColor="#c62828"
+             android:layout_alignParentTop="true"
+             android:layout_alignParentRight="true"
+             android:layout_alignParentEnd="true"
+             android:layout_marginTop="15dp" />
+
+         <TextView
+             android:text="Delhi"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:id="@+id/tv_name"
+             android:textStyle="normal|bold"
+             android:textSize="22sp"
+             android:textColor="#212121"
+             android:layout_alignTop="@+id/tv_temp_main"
+             android:layout_alignLeft="@+id/tv_description"
+             android:layout_alignStart="@+id/tv_description" />
+
+         <TextView
+             android:text="MIN TEMP"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_marginTop="13dp"
+             android:id="@+id/tv_label_min"
+             android:layout_below="@+id/tv_description"
+             android:layout_alignLeft="@+id/tv_description"
+             android:layout_alignStart="@+id/tv_description"
+             android:textColor="#0d47a1"
+             android:textStyle="normal|bold"
+             android:textSize="16sp" />
+
+         <TextView
+             android:text="16"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_alignTop="@+id/tv_label_min"
+             android:layout_toRightOf="@+id/tv_label_min"
+             android:layout_toEndOf="@+id/tv_label_min"
+             android:layout_marginLeft="18dp"
+             android:layout_marginStart="8dp"
+             android:id="@+id/tv_temp_min"
+             android:textColor="#212121"
+             android:textStyle="normal|bold"
+             android:textSize="16sp" />
+
+         <TextView
+             android:text="Clear morning sky with slight drizzle"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:id="@+id/tv_description"
+             android:textColor="#727272"
+             android:layout_marginRight="30dp"
+             android:layout_marginEnd="30dp"
+             android:layout_below="@+id/tv_temp_main"
+             android:layout_alignParentLeft="true"
+             android:layout_marginLeft="30dp"
+             android:layout_marginStart="30dp"
+             android:textSize="17.5sp" />
+
+         <TextView
+             android:text="MAX TEMP"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:id="@+id/label_tv_temp_max"
+             android:textColor="#0d47a1"
+             android:textStyle="normal|bold"
+             android:layout_alignBaseline="@+id/tv_temp_min"
+             android:layout_alignBottom="@+id/tv_temp_min"
+             android:layout_marginLeft="40dp"
+             android:layout_toRightOf="@+id/tv_temp_min"
+             android:textSize="16sp" />
+
+         <TextView
+             android:text="25"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:id="@+id/tv_temp_max"
+             android:layout_marginLeft="18dp"
+             android:textColor="#212121"
+             android:textStyle="normal|bold"
+             android:layout_toRightOf="@id/label_tv_temp_max"
+             android:layout_alignTop="@id/label_tv_temp_max"
+             android:textSize="16sp" />
+
+     </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>
