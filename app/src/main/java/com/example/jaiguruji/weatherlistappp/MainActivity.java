@@ -68,11 +68,9 @@ public class MainActivity extends AppCompatActivity implements OnAsynctTaskCompl
     private void requestForData(){
         if(HelperFunctions.isInternetConnected(mContext)){
             StringBuilder URL = new StringBuilder();
-            http://api.openweathermap.org/data/2.5/group?id=524901,703448,2643743&units=metric&appid=b1b15e88fa797225412429c1c50c122a1
+
             //open weather api with appended city ids and app Id.
-            URL.append("http://api.openweathermap.org/data/2.5/group?id=1270642,1274746,1269743,1256237,1262321,1275841&units=metric&appid=e4018e2554a19c99511f7f24401f108e");
-//            URL.append("1275841,1263214,1270583,1270583,1271157&units=metric&appid=");
-//            URL.append(APP_ID);
+            URL.append("http://api.openweathermap.org/data/2.5/group?id=1270642,1274746,1269743,1256237,1262321,1275841,1270583,1271157&units=metric&appid=e4018e2554a19c99511f7f24401f108e");
 
             //http://api.openweathermap.org/data/2.5/group?id=1270642,1274746,1269743,1256237,1262321,1275841,1263214,1270583,1270583,1271157&units=metric&appid=e4018e2554a19c99511f7f24401f108e
             AsyncTaskFetchData asyncTaskFetchData = new AsyncTaskFetchData(mContext,this);
